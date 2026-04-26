@@ -1,0 +1,123 @@
+<div class="detail-page">
+  @if (loading()) {
+    <div class="spinner-center"><mat-spinner diameter="56"></mat-spinner></div>
+  }
+
+  @if (!loading() && assignment(); as a) {
+    <div class="detail-header">
+      <button mat-icon-button routerLink="/home" matTooltip="Retour à la liste">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>Détails de l'assignment</h1>
+    </div>
+
+    <div class="detail-grid">
+      <!-- Carte principale -->
+      <mat-card class="main-card">
+        <mat-card-header>
+          <div mat-card-avatar class="matiere-avatar">
+            <img [src]="a.imageMatiere" [alt]="a.matiere" onerror="this.style.display='none'"/>
+          </div>
+          <mat-card-title>{{ a.nom }}</mat-card-title>
+          <mat-card-subtitle>{{ a.matiere }}</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="info-grid">
+            <div class="info-item">
+              <mat-icon class="info-icon">event</mat-icon>
+              <div>
+                <span class="label">Date de rendu</span>
+                <span class="value">{{ a.dateDeRendu | date:'dd MMMM yyyy':'':'fr' }}</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <mat-icon class="info-icon">check_circle</mat-icon>
+              <div>
+                <span class="label">Statut</span>
+                <span class="statut-chip" [class.rendu]="a.rendu" [class.non-rendu]="!a.rendu">
+                  {{ a.rendu ? '✅ Rendu' : '⏳ Non rendu' }}
+                </span>
+              </div>
+            </div>
+
+            @if (a.note !== null && a.note !== undefined) {
+              <div class="info-item">
+                <mat-icon class="info-icon">grade</mat-icon>
+                <div>
+                  <span class="label">Note</span>
+                  <span class="note-display" [style.color]="getNoteColor(a.note)">
+                    {{ a.note }}/20 — <em>{{ getNoteLabel(a.note) }}</em>
+                  </span>
+                </div>
+              </div>
+            }
+
+            @if (a.remarques) {
+              <div class="info-item full-width">
+                <mat-icon class="info-icon">comment</mat-icon>
+                <div>
+                  <span class="label">Remarques</span>
+                  <span class="value remarques">{{ a.remarques }}</span>
+                </div>
+              </div>
+            }
+          </div>
+        </mat-card-content>
+
+        <mat-divider></mat-divider>
+
+        <mat-card-actions class="actions">
+          @if (isLoggedIn()) {
+            <button mat-raised-button [color]="a.rendu ? 'warn' : 'primary'" (click)="toggleRendu()">
+              <mat-icon>{{ a.rendu ? 'undo' : 'check' }}</mat-icon>
+              {{ a.rendu ? 'Marquer non rendu' : 'Marquer comme rendu' }}
+            </button>
+
+            <a [routerLink]="'edit'">
+              <button mat-stroked-button color="primary">
+                <mat-icon>edit</mat-icon> Modifier
+              </button>
+            </a>
+          }
+
+          @if (isAdmin()) {
+            <button mat-stroked-button color="warn" (click)="onDelete()">
+              <mat-icon>delete</mat-icon> Supprimer
+            </button>
+          }
+        </mat-card-actions>
+      </mat-card>
+
+      <!-- Carte auteur -->
+      <div class="side-cards">
+        <mat-card class="person-card">
+          <mat-card-header>
+            <mat-card-title>Auteur</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="person-info">
+              <img [src]="a.photoAuteur || 'https://i.pravatar.cc/150?img=5'"
+                   [alt]="a.auteur" class="avatar-lg" onerror="this.src='https://i.pravatar.cc/150?img=5'"/>
+              <span class="person-name">{{ a.auteur || 'Non renseigné' }}</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="person-card">
+          <mat-card-header>
+            <mat-card-title>Professeur</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="person-info">
+              <img [src]="a.photoProf || 'https://i.pravatar.cc/150?img=10'"
+                   [alt]="a.professorName" class="avatar-lg" onerror="this.src='https://i.pravatar.cc/150?img=10'"/>
+              <span class="person-name">{{ a.professorName || 'Non renseigné' }}</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  }
+</div>

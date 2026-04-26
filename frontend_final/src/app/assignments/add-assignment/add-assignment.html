@@ -1,0 +1,154 @@
+<div class="add-page">
+  <div class="page-header">
+    <button mat-icon-button routerLink="/home">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1><mat-icon>add_circle</mat-icon> Ajouter un Assignment</h1>
+  </div>
+
+  <mat-stepper linear #stepper class="add-stepper">
+
+    <!-- ÉTAPE 1 : Informations du devoir -->
+    <mat-step [completed]="nom() && dateDeRendu() && matiereSelectionnee()">
+      <ng-template matStepLabel>Devoir</ng-template>
+      <div class="step-content">
+        <h2 class="step-title"><mat-icon>description</mat-icon> Informations du devoir</h2>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nom du devoir *</mat-label>
+          <input matInput [ngModel]="nom()" (ngModelChange)="nom.set($event)"
+                 placeholder="ex: TP Bases de données N°3"/>
+          <mat-icon matPrefix>title</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Date de rendu *</mat-label>
+          <input matInput [matDatepicker]="picker"
+                 [ngModel]="dateDeRendu()" (ngModelChange)="dateDeRendu.set($event)"/>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-icon matPrefix>event</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Matière *</mat-label>
+          <mat-select [ngModel]="matiereSelectionnee()" (ngModelChange)="onMatiereChange($event)">
+            @for (m of matieres; track m.nom) {
+              <mat-option [value]="m.nom">
+                <div class="matiere-option">
+                  <img [src]="m.image" [alt]="m.nom" class="option-img"/>
+                  <span>{{ m.nom }}</span>
+                </div>
+              </mat-option>
+            }
+          </mat-select>
+          <mat-icon matPrefix>book</mat-icon>
+        </mat-form-field>
+
+        <!-- Aperçu prof -->
+        @if (selectedMatiere) {
+          <div class="prof-preview">
+            <img [src]="selectedMatiere.photoProf" [alt]="selectedMatiere.prof" class="prof-avatar"/>
+            <div>
+              <span class="prof-label">Professeur</span>
+              <span class="prof-name">{{ selectedMatiere.prof }}</span>
+            </div>
+          </div>
+        }
+
+        <div class="step-actions">
+          <button mat-raised-button color="primary" matStepperNext
+                  [disabled]="!nom() || !dateDeRendu() || !matiereSelectionnee()">
+            Suivant <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-step>
+
+    <!-- ÉTAPE 2 : Auteur -->
+    <mat-step [completed]="!!auteur()">
+      <ng-template matStepLabel>Auteur</ng-template>
+      <div class="step-content">
+        <h2 class="step-title"><mat-icon>person</mat-icon> Informations de l'auteur</h2>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nom de l'auteur (étudiant) *</mat-label>
+          <input matInput [ngModel]="auteur()" (ngModelChange)="auteur.set($event)"
+                 placeholder="ex: Ibrahim Yankine"/>
+          <mat-icon matPrefix>person</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>URL photo (optionnel)</mat-label>
+          <input matInput [ngModel]="photoAuteur()" (ngModelChange)="photoAuteur.set($event)"
+                 placeholder="https://..."/>
+          <mat-icon matPrefix>image</mat-icon>
+          <mat-hint>Laissez vide pour une photo générée automatiquement</mat-hint>
+        </mat-form-field>
+
+        @if (photoAuteur()) {
+          <div class="photo-preview">
+            <img [src]="photoAuteur()" alt="Photo auteur" class="preview-avatar"/>
+          </div>
+        }
+
+        <div class="step-actions">
+          <button mat-stroked-button matStepperPrevious>
+            <mat-icon>arrow_back</mat-icon> Précédent
+          </button>
+          <button mat-raised-button color="primary" matStepperNext [disabled]="!auteur()">
+            Suivant <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-step>
+
+    <!-- ÉTAPE 3 : Note & Rendu -->
+    <mat-step>
+      <ng-template matStepLabel>Note & Statut</ng-template>
+      <div class="step-content">
+        <h2 class="step-title"><mat-icon>grade</mat-icon> Note et statut</h2>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Note sur 20</mat-label>
+          <input matInput type="number" min="0" max="20"
+                 [ngModel]="note()" (ngModelChange)="note.set($event !== '' ? +$event : null)"
+                 placeholder="ex: 15"/>
+          <mat-icon matPrefix>grade</mat-icon>
+          <mat-hint>Laissez vide si le devoir n'est pas encore noté</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Remarques</mat-label>
+          <textarea matInput rows="4"
+                    [ngModel]="remarques()" (ngModelChange)="remarques.set($event)"
+                    placeholder="Commentaires sur le devoir..."></textarea>
+          <mat-icon matPrefix>comment</mat-icon>
+        </mat-form-field>
+
+        <div class="rendu-toggle">
+          <mat-slide-toggle [ngModel]="rendu()" (ngModelChange)="rendu.set($event)" color="primary">
+            Marquer comme rendu
+          </mat-slide-toggle>
+          @if (rendu() && note() === null) {
+            <p class="warning-rendu">
+              <mat-icon>warning</mat-icon>
+              Vous devez ajouter une note pour marquer "rendu".
+            </p>
+          }
+        </div>
+
+        <div class="step-actions">
+          <button mat-stroked-button matStepperPrevious>
+            <mat-icon>arrow_back</mat-icon> Précédent
+          </button>
+          <button mat-raised-button color="accent" (click)="onSubmit()"
+                  [disabled]="loading() || (rendu() && note() === null)">
+            @if (loading()) { Enregistrement... }
+            @else { <ng-container><mat-icon>save</mat-icon> Enregistrer</ng-container> }
+          </button>
+        </div>
+      </div>
+    </mat-step>
+  </mat-stepper>
+</div>

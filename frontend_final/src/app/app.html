@@ -1,0 +1,86 @@
+<mat-toolbar color="primary" class="toolbar">
+  <button mat-icon-button (click)="toggleSidenav()" matTooltip="Menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span class="toolbar-title">
+    <mat-icon>assignment</mat-icon>
+    <a routerLink="/home" class="app-title">{{ titre }}</a>
+  </span>
+  <span class="spacer"></span>
+
+  @if (isLoggedIn()) {
+    <span class="user-info">
+      <mat-icon>account_circle</mat-icon>
+      <span class="username">{{ currentUser()?.username }}</span>
+      @if (isAdmin()) {
+        <span class="admin-badge">ADMIN</span>
+      }
+    </span>
+    <button mat-icon-button (click)="logout()" matTooltip="Se déconnecter" color="warn">
+      <mat-icon>logout</mat-icon>
+    </button>
+  } @else {
+    <a routerLink="/login">
+      <button mat-stroked-button class="login-btn">
+        <mat-icon>login</mat-icon> Connexion
+      </button>
+    </a>
+  }
+</mat-toolbar>
+
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav [opened]="sidenavOpened()" mode="side" class="sidenav">
+    <div class="sidenav-content">
+      <div class="sidenav-logo">
+        <mat-icon class="logo-icon">school</mat-icon>
+        <span>ESATIC 2025/2026</span>
+      </div>
+      <mat-divider></mat-divider>
+
+      <nav class="nav-links">
+        <a routerLink="/home" class="nav-item">
+          <button mat-button class="nav-btn">
+            <mat-icon>home</mat-icon>
+            <span>Accueil</span>
+          </button>
+        </a>
+
+        @if (isLoggedIn()) {
+          <a routerLink="/add" class="nav-item">
+            <button mat-button class="nav-btn">
+              <mat-icon>add_circle</mat-icon>
+              <span>Ajouter</span>
+            </button>
+          </a>
+        }
+
+        @if (!isLoggedIn()) {
+          <a routerLink="/login" class="nav-item">
+            <button mat-button class="nav-btn">
+              <mat-icon>login</mat-icon>
+              <span>Connexion</span>
+            </button>
+          </a>
+          <a routerLink="/register" class="nav-item">
+            <button mat-button class="nav-btn">
+              <mat-icon>person_add</mat-icon>
+              <span>Inscription</span>
+            </button>
+          </a>
+        }
+
+        @if (isLoggedIn()) {
+          <mat-divider></mat-divider>
+          <button mat-button class="nav-btn logout-btn" (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Déconnexion</span>
+          </button>
+        }
+      </nav>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="main-content">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

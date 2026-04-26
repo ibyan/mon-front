@@ -1,0 +1,131 @@
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.page-header h1 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.total-badge {
+  background: #667eea;
+  color: white;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-left: 12px;
+}
+
+.filtres-bar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  background: white;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.search-field { min-width: 240px; }
+.select-field { min-width: 160px; }
+
+.filtres-bar mat-form-field { margin-bottom: -1.25em; }
+
+.spinner-center {
+  display: flex;
+  justify-content: center;
+  padding: 48px;
+}
+
+.table-container {
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+}
+
+.assignments-table { width: 100%; }
+
+.table-row { cursor: pointer; transition: background 0.15s; }
+.table-row:hover { background: #f0f4ff; }
+
+.matiere-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.matiere-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.auteur-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.avatar-sm {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.nom-cell {
+  font-weight: 500;
+  max-width: 220px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.note-badge {
+  color: white;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.no-note { color: #aaa; font-style: italic; }
+
+.statut-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.statut-chip mat-icon { font-size: 16px; width: 16px; height: 16px; }
+
+.statut-chip.rendu {
+  background: #e8f5e9;
+  color: #388e3c;
+}
+
+.statut-chip.non-rendu {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+mat-paginator {
+  border-top: 1px solid #eee;
+}

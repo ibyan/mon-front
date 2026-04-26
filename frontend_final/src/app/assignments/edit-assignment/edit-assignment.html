@@ -1,0 +1,108 @@
+<div class="edit-page">
+  <div class="page-header">
+    <button mat-icon-button (click)="router.navigate(['/home'])">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1><mat-icon>edit</mat-icon> Modifier l'Assignment</h1>
+  </div>
+
+  @if (loading()) {
+    <div class="spinner-center"><mat-spinner diameter="56"></mat-spinner></div>
+  }
+
+  @if (!loading() && assignment(); as a) {
+    <mat-card class="edit-card">
+      <mat-card-header>
+        <mat-card-title>{{ a.nom }}</mat-card-title>
+        <mat-card-subtitle>Modification des informations</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="form-grid">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nom du devoir</mat-label>
+            <input matInput [ngModel]="nom()" (ngModelChange)="nom.set($event)"/>
+            <mat-icon matPrefix>title</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Date de rendu</mat-label>
+            <input matInput [matDatepicker]="picker"
+                   [ngModel]="dateDeRendu()" (ngModelChange)="dateDeRendu.set($event)"/>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-icon matPrefix>event</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Matière</mat-label>
+            <mat-select [ngModel]="matiere()" (ngModelChange)="onMatiereChange($event)">
+              @for (m of matieres; track m.nom) {
+                <mat-option [value]="m.nom">
+                  <div class="matiere-option">
+                    <img [src]="m.image" [alt]="m.nom" class="option-img"/>
+                    <span>{{ m.nom }}</span>
+                  </div>
+                </mat-option>
+              }
+            </mat-select>
+            <mat-icon matPrefix>book</mat-icon>
+          </mat-form-field>
+
+          <div class="two-cols">
+            <mat-form-field appearance="outline">
+              <mat-label>Auteur</mat-label>
+              <input matInput [ngModel]="auteur()" (ngModelChange)="auteur.set($event)"/>
+              <mat-icon matPrefix>person</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Note / 20</mat-label>
+              <input matInput type="number" min="0" max="20"
+                     [ngModel]="note()" (ngModelChange)="note.set($event !== '' ? +$event : null)"/>
+              <mat-icon matPrefix>grade</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Remarques</mat-label>
+            <textarea matInput rows="3"
+                      [ngModel]="remarques()" (ngModelChange)="remarques.set($event)"></textarea>
+            <mat-icon matPrefix>comment</mat-icon>
+          </mat-form-field>
+
+          <div class="rendu-section">
+            <mat-slide-toggle [ngModel]="rendu()" (ngModelChange)="rendu.set($event)" color="primary">
+              {{ rendu() ? '✅ Rendu' : '⏳ Non rendu' }}
+            </mat-slide-toggle>
+            @if (rendu() && note() === null) {
+              <p class="warning-rendu">
+                <mat-icon>warning</mat-icon> Vous devez ajouter une note pour marquer "rendu".
+              </p>
+            }
+          </div>
+
+          <!-- Aperçu prof si matière sélectionnée -->
+          @if (selectedMatiere) {
+            <div class="prof-preview">
+              <img [src]="selectedMatiere.photoProf" [alt]="selectedMatiere.prof" class="prof-avatar"/>
+              <div>
+                <span class="prof-label">Professeur associé</span>
+                <span class="prof-name">{{ selectedMatiere.prof }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions class="form-actions">
+        <button mat-stroked-button routerLink="/home">Annuler</button>
+        <button mat-raised-button color="primary" (click)="onSave()"
+                [disabled]="saving() || !nom() || !dateDeRendu() || (rendu() && note() === null)">
+          @if (saving()) { <mat-spinner diameter="20"></mat-spinner> }
+          @else { <ng-container><mat-icon>save</mat-icon> Enregistrer</ng-container> }
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  }
+</div>

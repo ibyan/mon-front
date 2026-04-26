@@ -1,0 +1,31 @@
+@import '@angular/material/prebuilt-themes/azure-blue.css';
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Roboto', 'Segoe UI', sans-serif;
+  background: #f5f7fa;
+}
+
+* { box-sizing: border-box; }
+
+/* SnackBar styles */
+.snack-success .mdc-snackbar__surface {
+  background: #4caf50 !important;
+}
+
+.snack-error .mdc-snackbar__surface {
+  background: #f44336 !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #667eea; border-radius: 3px; }
+
+/* Material overrides */
+.mat-mdc-card {
+  border-radius: 12px !important;
+}
+
+a { text-decoration: none; }
