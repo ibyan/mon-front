@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "start": "node server.js",
     "startdev": "node scripts/generate-env.mjs && ng serve",
     "build": "node scripts/generate-env.mjs && ng build",
     "watch": "node scripts/generate-env.mjs && ng build --watch --configuration development",
