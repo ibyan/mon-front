@@ -4,3 +4,4 @@ src/app/shared/app-env.ts
 *.log
 .angular/
 .env.example
+dist/
