@@ -1,7 +1,0 @@
-node_modules/
-.env
-src/app/shared/app-env.ts
-*.log
-.angular/
-.env.example
-dist/
